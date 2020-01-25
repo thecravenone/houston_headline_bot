@@ -44,17 +44,18 @@ for submission in reddit.subreddit('houston').new(limit=10):
 											# eliminating the most common
 											# domain we won't be using
 				if domain in regexes:
+					title = submission.title.rstrip()
 					log("Submission: https://redd.it/" + thread_id)
-					log("Title: " + submission.title)
+					log("Title: " + title)
 					log("Fetching...")
 					site_content = requests.get(url).text
-					headline = re.findall(regexes[domain], site_content)[0]
+					headline = re.findall(regexes[domain], site_content)[0].rstrip()
 					log("Detected headline: " + headline)
 					log("Headline good!")
-					if headline != submission.title:
+					if headline != title:
 						log("***** DETECTED BAD HEADLINE *****")
 						log("ORIGINAL: " + headline)
-						log("OP      : " + submission.title)
+						log("OP      : " + title)
 						complain(thread_id, headline)
 				else:
 					log("Unknown domain: " + domain + " submission: https://redd.it/" + thread_id)
