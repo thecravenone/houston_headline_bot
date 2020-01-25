@@ -1,0 +1,82 @@
+from datetime import datetime
+import praw, re, requests, sys, creds
+
+reddit = praw.Reddit(client_id=creds.client_id,
+                     client_secret=creds.client_secret,
+                     password=creds.password,
+                     user_agent='/r/Houston headline bot by /u/thecravenone',
+                     username=creds.username)
+
+def complain(submission, headline):
+	message = "Detected bad submission at https://redd.it/" + submission + "\n\nOriginal headline: " + headline
+	reddit.redditor('thecravenone').message('Bot checking in!', message)
+	this_submission = reddit.submission(id=submission)
+	this_submission.reply('Original headline:\n>#' + headline)
+
+def log(input):
+	stamp = str(datetime.now())
+	print(stamp + " " + input)
+
+regexes = {
+	"www.houstonchronicle.com":"(?<=\>)(.*?)(?=<\/h1>)",
+	"www.khou.com":"(?<=\>)(.*?)(?=<\/h1>)",
+	"www.houstonpublicmedia.org":"(?<=\>)(.*?)(?=<\/h1>)",
+	"www.click2houston.com":"(?<=\"headline\":\")(.*?)(?=\",\"description\")",
+	"www.chron.com":"(?<=og:title\" content=\")(.*)(?=\"\ +\/>)",
+	"abc13.com":"(?<=h1 class=\"headline\">)(.*)(?=<\/h1>)"
+}
+url_regex = "(?<=\/\/).*?(?=\/)"
+
+
+
+log("Run begining.")
+
+runtime = int(datetime.now().timestamp())
+
+for submission in reddit.subreddit('houston').new(limit=10):
+	subtime = submission.created_utc
+	if subtime > runtime - 300:
+		if not submission.is_self:
+			url = submission.url
+			thread_id = str(submission)
+			domain = re.findall(url_regex, url)[0]
+			if not domain == "i.redd.it":	# Reduce comparisons by 
+											# eliminating the most common
+											# domain we won't be using
+				if domain in regexes:
+					log("Submission: https://redd.it/" + thread_id)
+					log("Title: " + submission.title)
+					log("Fetching...")
+					site_content = requests.get(url).text
+					headline = re.findall(regexes[domain], site_content)[0]
+					log("Detected headline: " + headline)
+					log("Headline good!")
+					if headline != submission.title:
+						log("***** DETECTED BAD HEADLINE *****")
+						log("ORIGINAL: " + headline)
+						log("OP      : " + submission.title)
+						complain(thread_id, headline)
+				else:
+					log("Unknown domain: " + domain + " submission: https://redd.it/" + thread_id)
+	else:				
+		log("All further submissions are > 5 minutes old")
+		sys.exit()	# Submissions are returned in order from newest to oldest.
+					# Therefore any further submissions are too old and do not
+					# need to be evaluated
+
+"""
+of 132 urls submitted to /r/Houston, Houston-based news sources I haven't added are:
+      1 www.houstoniamag.com
+      1 www.fox26houston.com
+      1 houston.eater.com
+
+      domains_to_ignore = [
+	"i.reddit.com",
+	"v.reddit.com",
+	"imgur.com",
+	"i.imgur.com",
+	"www.youtube.com",
+	"youtu.be",
+	"twitter.com"
+]
+"""
