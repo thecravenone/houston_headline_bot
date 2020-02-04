@@ -18,7 +18,7 @@ def log(input):
 	print(stamp + " " + input)
 
 regexes = {
-	"www.houstonchronicle.com":"(?<=\>)(.*?)(?=<\/h1>)",
+	"www.houstonchronicle.com":"(?<=\"\>)(.*?)(?=<\/h1>)",
 	"www.khou.com":"(?<=\>)(.*?)(?=<\/h1>)",
 	"www.houstonpublicmedia.org":"(?<=\>)(.*?)(?=<\/h1>)",
 	"www.click2houston.com":"(?<=\"headline\":\")(.*?)(?=\",\"description\")",
