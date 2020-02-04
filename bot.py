@@ -51,12 +51,13 @@ for submission in reddit.subreddit('houston').new(limit=10):
 					site_content = requests.get(url).text
 					headline = re.findall(regexes[domain], site_content)[0].rstrip()
 					log("Detected headline: " + headline)
-					log("Headline good!")
 					if headline != title:
 						log("***** DETECTED BAD HEADLINE *****")
 						log("ORIGINAL: " + headline)
 						log("OP      : " + title)
 						complain(thread_id, headline)
+					else:
+						log("Headline good!")
 				else:
 					log("Unknown domain: " + domain + " submission: https://redd.it/" + thread_id)
 	else:				
