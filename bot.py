@@ -1,5 +1,5 @@
 from datetime import datetime
-import praw, re, requests, sys, creds
+import praw, re, requests, html, sys, creds
 
 reddit = praw.Reddit(client_id=creds.client_id,
                      client_secret=creds.client_secret,
@@ -49,7 +49,8 @@ for submission in reddit.subreddit('houston').new(limit=10):
 					log("Title: " + title)
 					log("Fetching...")
 					site_content = requests.get(url).text
-					headline = re.findall(regexes[domain], site_content)[0].rstrip()
+					headline = html.unescape(re.findall(regexes[domain], site_content)[0].rstrip())
+						#Get the regex's result, strip trailing whitespace and convert HTML entities to characters
 					log("Detected headline: " + headline)
 					if headline != title:
 						log("***** DETECTED BAD HEADLINE *****")
