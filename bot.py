@@ -66,20 +66,3 @@ for submission in reddit.subreddit('houston').new(limit=10):
 		sys.exit()	# Submissions are returned in order from newest to oldest.
 					# Therefore any further submissions are too old and do not
 					# need to be evaluated
-
-"""
-of 132 urls submitted to /r/Houston, Houston-based news sources I haven't added are:
-      1 www.houstoniamag.com
-      1 www.fox26houston.com
-      1 houston.eater.com
-
-      domains_to_ignore = [
-	"i.reddit.com",
-	"v.reddit.com",
-	"imgur.com",
-	"i.imgur.com",
-	"www.youtube.com",
-	"youtu.be",
-	"twitter.com"
-]
-"""
