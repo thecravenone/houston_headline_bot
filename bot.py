@@ -23,7 +23,8 @@ regexes = {
 	"www.houstonpublicmedia.org":"(?<=\>)(.*?)(?=<\/h1>)",
 	"www.click2houston.com":"(?<=\"headline\":\")(.*?)(?=\",\"description\")",
 	"www.chron.com":"(?<=og:title\" content=\")(.*)(?=\"\ +\/>)",
-	"abc13.com":"(?<=class=\"headline\">)(.*)(?=<\/h1>)"
+	"abc13.com":"(?<=class=\"headline\">)(.*)(?=<\/h1>)",
+	"spacecityweather.com":"(?<=<h1 class=\"amp-wp-title\">)(.*?)(?=</h1>)"
 }
 url_regex = "(?<=\/\/).*?(?=\/)"
 
