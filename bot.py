@@ -19,7 +19,7 @@ def log(input):
 
 regexes = {
 	"www.houstonchronicle.com":"(?<=\"\>)(.*?)(?=<\/h1>)",
-	"www.khou.com":"(?<=\>)(.*?)(?=<\/h1>)",
+	"www.khou.com":"(?<=\"article__headline\"\>)(.*?)(?=<\/h1>)",
 	"www.houstonpublicmedia.org":"(?<=\>)(.*?)(?=<\/h1>)",
 	"www.click2houston.com":"(?<=\"headline\":\")(.*?)(?=\",\"description\")",
 	"www.chron.com":"(?<=og:title\" content=\")(.*)(?=\"\ +\/>)",
