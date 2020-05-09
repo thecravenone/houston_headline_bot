@@ -23,6 +23,7 @@ regexes = {
 	"www.houstonpublicmedia.org":"(?<=\>)(.*?)(?=<\/h1>)",
 	"www.click2houston.com":"(?<=\"headline\":\")(.*?)(?=\",\"description\")",
 	"www.chron.com":"(?<=og:title\" content=\")(.*)(?=\"\ +\/>)",
+	"chron slideshow":"(?<=og:title\" content=\")(.*)(?=\"\/><meta property=\"og:description)",
 	"abc13.com":"(?<=class=\"headline\">)(.*)(?=<\/h1>)",
 	"spacecityweather.com":"(?<=<h1 class=\"amp-wp-title\">)(.*?)(?=</h1>)"
 }
@@ -45,6 +46,11 @@ for submission in reddit.subreddit('houston').new(limit=10):
 											# eliminating the most common
 											# domain we won't be using
 				if domain in regexes:
+					# Handle needing a different regex for chron.com slideshows:
+					# TODO: A more elegant and extensible way to handle such things
+					if domain == "www.chron.com" and bool(re.match(r".*\/slideshow\/.*", url)):
+						domain = "chron slideshow"
+
 					title = submission.title.rstrip()
 					log("Submission: https://redd.it/" + thread_id)
 					log("Title: " + title)
