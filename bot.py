@@ -7,8 +7,8 @@ reddit = praw.Reddit(client_id=creds.client_id,
                      user_agent='/r/Houston headline bot by /u/thecravenone',
                      username=creds.username)
 
-def complain(submission, headline):
-	message = "Detected bad submission at https://redd.it/" + submission + "\n\nOriginal headline: " + headline
+def complain(submission, headline, title):
+	message = "Detected bad submission at https://redd.it/" + submission + "\n\nOriginal headline: " + headline + "\n\nOP's headline: " + title
 	reddit.redditor('thecravenone').message('Bot checking in!', message)
 	this_submission = reddit.submission(id=submission)
 	this_submission.reply('Original headline:\n>#' + headline)
@@ -57,7 +57,7 @@ for submission in reddit.subreddit('houston').new(limit=10):
 						log("***** DETECTED BAD HEADLINE *****")
 						log("ORIGINAL: " + headline)
 						log("OP      : " + title)
-						complain(thread_id, headline)
+						complain(thread_id, headline, title)
 					else:
 						log("Headline good!")
 				else:
