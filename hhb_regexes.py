@@ -6,5 +6,5 @@ regexes = {
 	"www.chron.com":"(?<=og:title\" content=\")(.*?)(?=\"\ ?\/>)",
 	"chron slideshow":"(?<=og:title\" content=\")(.*)(?=\"\/><meta property=\"og:description)",
 	"abc13.com":"(?<=class=\"headline\">)(.*)(?=<\/h1>)",
-	"spacecityweather.com":"(?<=<h1 class=\"amp-wp-title\">)(.*?)(?=</h1>)"
+	"spacecityweather.com":"(?<=og:title\" content=\").*?(?=\"( \/>)?)"
 }
